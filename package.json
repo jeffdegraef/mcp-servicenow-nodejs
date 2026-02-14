@@ -1,6 +1,6 @@
 {
   "name": "servicenow-mcp-server",
-  "version": "2.1.7",
+  "version": "2.1.8",
   "description": "Multi-instance ServiceNow MCP server with 40+ tools, natural language search, and local script development",
   "main": "src/server.js",
   "type": "module",
@@ -23,6 +23,7 @@
     "@modelcontextprotocol/sdk": "^1.25.3",
     "axios": "^1.13.4",
     "chokidar": "^4.0.3",
+    "cors": "^2.8.6",
     "dotenv": "^16.6.1",
     "express": "^4.22.1",
     "zod": "^3.25.76"

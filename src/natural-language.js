@@ -16,35 +16,44 @@
  */
 const STATE_MAPPINGS = {
   incident: {
-    'new': '1',
-    'in progress': '2',
-    'on hold': '3',
-    'resolved': '6',
-    'closed': '7',
-    'canceled': '8',
-    'open': '1^ORstate=2^ORstate=3', // New, In Progress, or On Hold
+    'new': 'state=1',
+    'in progress': 'state=2',
+    'on hold': 'state=3',
+    'resolved': 'state=6',
+    'closed': 'state=7',
+    'canceled': 'state=8',
+    'open': 'state=1^ORstate=2^ORstate=3', // New, In Progress, or On Hold
     'active': 'active=true'
   },
   change_request: {
-    'new': '-5',
-    'assess': '-4',
-    'authorize': '-3',
-    'scheduled': '-2',
-    'implement': '-1',
-    'review': '0',
-    'closed': '3',
-    'canceled': '4',
+    'new': 'state=-5',
+    'assess': 'state=-4',
+    'authorize': 'state=-3',
+    'scheduled': 'state=-2',
+    'implement': 'state=-1',
+    'review': 'state=0',
+    'closed': 'state=3',
+    'canceled': 'state=4',
     'open': 'state<0', // Negative states are open
     'active': 'active=true'
   },
   problem: {
-    'new': '1',
-    'assessed': '2',
-    'root cause analysis': '3',
-    'fix in progress': '4',
-    'resolved': '6',
-    'closed': '7',
-    'open': '1^ORstate=2^ORstate=3^ORstate=4',
+    'new': 'state=1',
+    'assessed': 'state=2',
+    'root cause analysis': 'state=3',
+    'fix in progress': 'state=4',
+    'resolved': 'state=6',
+    'closed': 'state=7',
+    'open': 'state=1^ORstate=2^ORstate=3^ORstate=4',
+    'active': 'active=true'
+  },
+  sn_customerservice_case: {
+    'new': 'state=1',
+    'open': 'state=10',
+    'awaiting info': 'state=18',
+    'resolved': 'state=6',
+    'closed': 'state=3',
+    'canceled': 'state=7',
     'active': 'active=true'
   }
 };

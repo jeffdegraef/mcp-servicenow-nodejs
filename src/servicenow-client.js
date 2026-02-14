@@ -71,12 +71,43 @@ export class ServiceNowClient {
   // Generic table operations
   async getRecords(table, query = {}) {
     const params = new URLSearchParams();
-    if (query.sysparm_query) params.append('sysparm_query', query.sysparm_query);
-    if (query.sysparm_limit) params.append('sysparm_limit', query.sysparm_limit);
-    if (query.sysparm_fields) params.append('sysparm_fields', query.sysparm_fields);
 
-    const response = await this.client.get(`/api/now/table/${table}?${params}`);
-    return response.data.result;
+    // Standard sysparm mapping
+    const paramMapping = {
+      sysparm_query: query.sysparm_query,
+      sysparm_limit: query.sysparm_limit,
+      sysparm_fields: query.sysparm_fields,
+      sysparm_offset: query.sysparm_offset,
+      sysparm_order_by: query.sysparm_order_by,
+      sysparm_display_value: query.sysparm_display_value,
+      sysparm_exclude_reference_link: query.sysparm_exclude_reference_link
+    };
+
+    // Append only defined parameters
+    Object.entries(paramMapping).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== '') {
+        params.append(key, value);
+      }
+    });
+
+    try {
+      const url = `/api/now/table/${table}?${params.toString()}`;
+      const response = await this.client.get(url);
+      return response.data.result;
+    } catch (error) {
+      if (error.response && error.response.status === 403) {
+        console.error(`❌ 403 Forbidden on table ${table}`);
+        console.error(`🔗 URL: ${this.instanceUrl}/api/now/table/${table}?${params.toString()}`);
+        console.error(`📝 Query: ${query.sysparm_query || 'none'}`);
+        console.error(`📋 Fields: ${query.sysparm_fields || 'all'}`);
+
+        // Suggest common fixes
+        if (table.startsWith('sn_')) {
+          console.error('💡 This is a scoped table. Check Application Access -> "Allow access via web services" in ServiceNow.');
+        }
+      }
+      throw error;
+    }
   }
 
   async getRecord(table, sysId, queryParams = {}) {

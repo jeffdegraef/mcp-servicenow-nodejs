@@ -9,6 +9,7 @@ import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { ListToolsRequestSchema, CallToolRequestSchema, ListResourcesRequestSchema, ReadResourceRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import fs from 'fs/promises';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import { configManager } from './config-manager.js';
 import { syncScript, syncAllScripts, SCRIPT_TYPES } from './script-sync.js';
 import { parseNaturalLanguage, getSupportedPatterns } from './natural-language.js';
@@ -45,7 +46,9 @@ export async function createMcpServer(serviceNowClient) {
   // Load table metadata
   let tableMetadata = {};
   try {
-    const metadataPath = path.resolve(path.dirname(import.meta.url.replace('file://', '')), 'config/comprehensive-table-definitions.json');
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    const metadataPath = path.join(__dirname, 'config/comprehensive-table-definitions.json');
     const rawData = await fs.readFile(metadataPath, 'utf-8');
     const fullData = JSON.parse(rawData);
 
@@ -1686,8 +1689,7 @@ ${show_patterns ? `\n## Supported Patterns:\n${JSON.stringify(getSupportedPatter
           const queryParams = {
             sysparm_limit: limit,
             sysparm_query: parseResult.encodedQuery,
-            sysparm_fields: fields,
-            sysparm_offset: 0
+            sysparm_fields: fields
           };
 
           if (order_by) {
