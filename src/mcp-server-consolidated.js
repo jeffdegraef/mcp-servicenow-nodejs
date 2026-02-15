@@ -1249,6 +1249,92 @@ export async function createMcpServer(serviceNowClient) {
           },
           required: ['problem_number', 'resolution_notes']
         }
+      },
+      // Case management tools (Customer Service Management)
+      {
+        name: 'SN-List-Cases',
+        description: 'List Case records (sn_customerservice_case) with filtering and pagination',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            state: {
+              type: 'string',
+              description: 'Filter by state (e.g., "10" for Open, "3" for Closed) (optional)'
+            },
+            priority: {
+              type: 'number',
+              description: 'Filter by priority (1-5) (optional)'
+            },
+            account: {
+              type: 'string',
+              description: 'Filter by account sys_id (optional)'
+            },
+            query: {
+              type: 'string',
+              description: 'ServiceNow encoded query string (optional)'
+            },
+            limit: {
+              type: 'number',
+              description: 'Maximum number of records to return (default: 25)',
+              default: 25
+            },
+            offset: {
+              type: 'number',
+              description: 'Number of records to skip for pagination (optional)'
+            },
+            fields: {
+              type: 'string',
+              description: 'Comma-separated list of fields to return (optional)'
+            },
+            order_by: {
+              type: 'string',
+              description: 'Field to sort by (optional)'
+            }
+          }
+        }
+      },
+      {
+        name: 'SN-Create-Case',
+        description: 'Create a new Customer Service Case',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            short_description: { type: 'string', description: 'short description (required)' },
+            description: { type: 'string', description: 'description (optional)' },
+            account: { type: 'string', description: 'account sys_id (optional)' },
+            contact: { type: 'string', description: 'contact sys_id (optional)' },
+            consumer: { type: 'string', description: 'consumer sys_id (optional)' },
+            priority: { type: 'string', description: 'priority (optional)' },
+            state: { type: 'string', description: 'state (optional)' },
+            assignment_group: { type: 'string', description: 'assignment group sys_id (optional)' },
+            assigned_to: { type: 'string', description: 'assigned to sys_id (optional)' },
+            work_notes: { type: 'string', description: 'work notes (optional)' }
+          },
+          required: ['short_description']
+        }
+      },
+      {
+        name: 'SN-Get-Case',
+        description: 'Get a Case by sys_id',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            sys_id: { type: 'string', description: 'System ID (required)' }
+          },
+          required: ['sys_id']
+        }
+      },
+      {
+        name: 'SN-Update-Case',
+        description: 'Update a Case by sys_id',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            sys_id: { type: 'string', description: 'System ID (required)' },
+            data: { type: 'object', description: 'Fields to update (required)' }
+          },
+          required: ['sys_id', 'data']
+        }
       }
     ];
 
@@ -1657,6 +1743,72 @@ export async function createMcpServer(serviceNowClient) {
             content: [{
               type: 'text',
               text: `Found ${results.length} Problem(s):\n${JSON.stringify(results, null, 2)}`
+            }]
+          };
+        }
+
+        case 'SN-List-Cases': {
+          const { state, priority, account, query, limit = 25, offset, fields, order_by } = args;
+
+          let finalQuery = query || '';
+          if (state && !finalQuery.includes('state')) {
+            finalQuery += (finalQuery ? '^' : '') + `state=${state}`;
+          }
+          if (priority && !finalQuery.includes('priority')) {
+            finalQuery += (finalQuery ? '^' : '') + `priority=${priority}`;
+          }
+          if (account && !finalQuery.includes('account')) {
+            finalQuery += (finalQuery ? '^' : '') + `account=${account}`;
+          }
+
+          const queryParams = {
+            sysparm_limit: limit,
+            sysparm_query: finalQuery || undefined,
+            sysparm_fields: fields,
+            sysparm_offset: offset
+          };
+
+          if (order_by) {
+            queryParams.sysparm_order_by = order_by;
+          }
+
+          const results = await serviceNowClient.getCases(queryParams);
+
+          return {
+            content: [{
+              type: 'text',
+              text: `Found ${results.length} Case(s):\n${JSON.stringify(results, null, 2)}`
+            }]
+          };
+        }
+
+        case 'SN-Create-Case': {
+          const result = await serviceNowClient.createCase(args);
+          return {
+            content: [{
+              type: 'text',
+              text: `Created Case: ${result.number}\n${JSON.stringify(result, null, 2)}`
+            }]
+          };
+        }
+
+        case 'SN-Get-Case': {
+          const result = await serviceNowClient.getRecord('sn_customerservice_case', args.sys_id);
+          return {
+            content: [{
+              type: 'text',
+              text: JSON.stringify(result, null, 2)
+            }]
+          };
+        }
+
+        case 'SN-Update-Case': {
+          const { sys_id, data } = args;
+          const result = await serviceNowClient.updateCase(sys_id, data);
+          return {
+            content: [{
+              type: 'text',
+              text: `Updated Case ${sys_id} successfully\n${JSON.stringify(result, null, 2)}`
             }]
           };
         }

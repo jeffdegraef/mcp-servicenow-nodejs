@@ -1,7 +1,7 @@
 <div align="center">
   <img src="assets/logo.svg" alt="ServiceNow MCP Server" width="200"/>
 
-  # ServiceNow MCP Server v2.1.9
+  # ServiceNow MCP Server v2.1.10
 
   **Multi-Instance Intelligent Architecture**
 
@@ -21,7 +21,7 @@
 
 - **🌐 Multi-Instance Support**: Connect to multiple ServiceNow instances simultaneously with instance-specific tool routing
 - **🧠 Intelligent Schema Discovery**: Automatically discovers table structures and relationships from your ServiceNow instances
-- **📊 160+ ServiceNow Tables**: Complete coverage including ITSM, CMDB, Service Catalog, Platform Development, and Flow Designer
+- **📊 160+ ServiceNow Tables**: Complete coverage including ITSM, CSM, CMDB, Service Catalog, Platform Development, and Flow Designer
 - **⚙️ Generic CRUD Operations**: 44 powerful MCP tools that work on **any** ServiceNow table
 - **🔧 Dynamic Schema Loading**: Table metadata discovered at runtime - no hardcoded definitions
 - **📱 Instance-Adaptive**: Automatically handles custom fields, modified tables, and different ServiceNow editions
@@ -29,6 +29,15 @@
 - **🎨 Local Script Development**: Sync scripts with Git, watch mode for continuous development
 - **🗣️ Natural Language Search**: Query ServiceNow using plain English queries
 - **📚 MCP Resources**: 8 read-only resource URIs for quick lookups and documentation
+
+## 🆕 What's New in v2.1.10
+
+**February 2026 Release**
+
+- 📦 **Case Management (CSM)**: Added 4 specialized tools for Customer Service Management (`SN-List-Cases`, `SN-Create-Case`, `SN-Get-Case`, `SN-Update-Case`).
+- 🔒 **Enhanced Credential Security**: refactored `ConfigManager` to prioritize local `.env` files for sensitive credentials (URL, username, password).
+- 🛡️ **Git Protection**: Automatically excludes `config/servicenow-instances.json` from Git tracking to prevent accidental credential leaks to GitHub.
+- 🗣️ **NL Search Improvements**: Enhanced natural language parsing to better handle common search prefixes like "show", "find", and "list".
 
 ## 🆕 What's New in v2.1.9
 

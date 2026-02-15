@@ -386,6 +386,27 @@ gs.info('✅ Update set changed to: ${updateSet.name}');`;
     return this.updateRecord('incident', sysId, data);
   }
 
+  // Case-specific methods (Customer Service Management)
+  async getCases(query = {}) {
+    return this.getRecords('sn_customerservice_case', query);
+  }
+
+  async getCaseByNumber(number) {
+    const cases = await this.getRecords('sn_customerservice_case', {
+      sysparm_query: `number=${number}`,
+      sysparm_limit: 1
+    });
+    return cases[0] || null;
+  }
+
+  async createCase(data) {
+    return this.createRecord('sn_customerservice_case', data);
+  }
+
+  async updateCase(sysId, data) {
+    return this.updateRecord('sn_customerservice_case', sysId, data);
+  }
+
   // User management
   async getUsers(query = {}) {
     return this.getRecords('sys_user', query);
