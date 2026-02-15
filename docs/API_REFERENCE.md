@@ -1,8 +1,8 @@
 # ServiceNow MCP Server - API Reference
 
 **Version:** 2.1
-**Last Updated:** 2025-10-06
-**Total Tools:** 44
+**Last Updated:** 2026-02-15
+**Total Tools:** 48
 
 Complete reference for all MCP tools and resources available in the ServiceNow server.
 
@@ -30,8 +30,11 @@ Complete reference for all MCP tools and resources available in the ServiceNow s
 ### 📊 **Generic CRUD Operations** (6 tools)
 Work on **any** ServiceNow table (160+ supported)
 
-### 🎯 **Specialized Tools** (6 tools)
-Table-specific list operations for core ITSM tables
+### 🎯 **Specialized Tools** (10 tools)
+Table-specific list operations for core ITSM and CSM tables
+
+### 📦 **Customer Service Management (CSM)** (4 tools)
+Specialized tools for Case Management (sn_customerservice_case)
 
 ### 🎫 **Incident Management Convenience Tools** (5 tools)
 User-friendly incident operations accepting incident numbers
@@ -161,6 +164,7 @@ Update an existing record.
 Each major table has specialized tools:
 
 - **Incidents:** `SN-List-Incidents`, `SN-Create-Incident`, `SN-Get-Incident`
+- **Cases:** `SN-List-Cases`, `SN-Create-Case`, `SN-Get-Case`, `SN-Update-Case`
 - **Changes:** `SN-List-ChangeRequests`
 - **Problems:** `SN-List-Problems`
 - **Users:** `SN-List-SysUsers`
@@ -385,6 +389,86 @@ SN-Approve-Change({
   "change_number": "CHG0012345",
   "approval_comments": "CAB approved. Proceed with scheduled maintenance window."
 })
+```
+
+---
+
+## Customer Service Management (CSM)
+
+Specialized tools for managing Customer Service Cases (`sn_customerservice_case`).
+
+### SN-List-Cases
+
+List Case records with advanced filtering and pagination.
+
+**Parameters:**
+```javascript
+{
+  "state": "10",                   // Optional: Filter by state (e.g., "10" for Open)
+  "priority": 2,                   // Optional: Filter by priority (1-5)
+  "account": "abc123...",          // Optional: Filter by account sys_id
+  "query": "active=true",          // Optional: Encoded query string
+  "limit": 25,                     // Optional: Max records (default: 25)
+  "offset": 0,                     // Optional: Skip records for pagination
+  "fields": "number,state,account",// Optional: Comma-separated fields
+  "order_by": "sys_created_on",    // Optional: Sort field
+  "instance": "prod"               // Optional: Target instance
+}
+```
+
+---
+
+### SN-Create-Case
+
+Create a new Customer Service Case.
+
+**Parameters:**
+```javascript
+{
+  "short_description": "Connection issue", // Required
+  "description": "User cannot connect...", // Optional
+  "account": "abc123...",                  // Optional: Account sys_id
+  "contact": "def456...",                  // Optional: Contact sys_id
+  "consumer": "ghi789...",                 // Optional: Consumer sys_id
+  "priority": "2",                         // Optional
+  "state": "10",                           // Optional
+  "assignment_group": "jkl012...",         // Optional: Group sys_id
+  "assigned_to": "mno345...",              // Optional: User sys_id
+  "work_notes": "Internal note",           // Optional
+  "instance": "dev"                        // Optional
+}
+```
+
+---
+
+### SN-Get-Case
+
+Get a Case by sys_id.
+
+**Parameters:**
+```javascript
+{
+  "sys_id": "abc123...", // Required
+  "instance": "prod"     // Optional
+}
+```
+
+---
+
+### SN-Update-Case
+
+Update a Case by sys_id.
+
+**Parameters:**
+```javascript
+{
+  "sys_id": "abc123...", // Required
+  "data": {              // Required: Fields to update
+    "state": "3",
+    "resolution_code": "Solved"
+  },
+  "instance": "prod"     // Optional
+}
 ```
 
 ---
@@ -1045,10 +1129,14 @@ ServiceNow enforces rate limits on API calls:
 - `SN-Get-Table-Schema` - Get basic table schema
 - `SN-List-Available-Tables` - List all available tables
 
-### Specialized List Tools (6 tools)
+### Specialized List Tools (10 tools)
 - `SN-List-Incidents` - List incidents with filters
 - `SN-Create-Incident` - Create new incident
 - `SN-Get-Incident` - Get incident by sys_id
+- `SN-List-Cases` - List CSM cases with filters
+- `SN-Create-Case` - Create new CSM case
+- `SN-Get-Case` - Get CSM case by sys_id
+- `SN-Update-Case` - Update CSM case by sys_id
 - `SN-List-ChangeRequests` - List change requests
 - `SN-List-Problems` - List problems
 - `SN-List-SysUsers` - List users

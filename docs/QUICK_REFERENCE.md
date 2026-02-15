@@ -141,11 +141,13 @@ SN-Batch-Update({
 
 ## 🎯 Specialized Tools (16)
 
-### ITSM Convenience
+### ITSM & CSM Convenience
 ```javascript
 SN-List-Incidents({ state: "1", priority: 1, limit: 25 })
 SN-Create-Incident({ short_description: "..." })
 SN-Get-Incident({ sys_id: "..." })
+SN-List-Cases({ state: "10", limit: 25 })
+SN-Create-Case({ short_description: "..." })
 SN-List-ChangeRequests({ state: "Pending Approval" })
 SN-List-Problems({ state: "Open" })
 ```
@@ -239,9 +241,9 @@ SN-Get-Current-Instance()
 | **Update Sets** | 6 | Automated set management |
 | **Workflows** | 4 | Complete workflow creation |
 | **Batch Ops** | 2 | Multi-record operations |
-| **ITSM Convenience** | 10 | **NEW!** Incident/Change/Problem |
+| **ITSM & CSM** | 14 | **NEW!** Incident/Case/Change/Problem |
 | **Specialized** | 16 | Users, schema, validation, scripts |
-| **TOTAL** | **44** | Up from 34 |
+| **TOTAL** | **48** | Up from 44 |
 
 ---
 

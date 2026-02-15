@@ -55,6 +55,7 @@ Resources that query data from a specific instance:
 - `servicenow://{instance}/update-sets/{sys_id}` - Specific update set with contents
 - `servicenow://{instance}/groups` - List active user groups
 - `servicenow://{instance}/change-requests` - List active change requests
+- `servicenow://{instance}/cases` - List active Customer Service cases
 
 ## Features
 
@@ -265,7 +266,7 @@ npx @modelcontextprotocol/inspector node src/stdio-server.js
 
 The MCP Resources implementation provides:
 
-- **9+ resource types** for common ServiceNow data
+- **10+ resource types** for common ServiceNow data
 - **Multi-instance routing** with automatic switching
 - **Metadata enrichment** with timestamps and record counts
 - **Cacheable responses** suitable for client-side caching

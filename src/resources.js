@@ -68,6 +68,12 @@ export function createResourceHandlers(serviceNowClient, configManager, tableMet
         mimeType: 'application/json',
         name: `Change Requests (${currentInstance.name})`,
         description: 'List of change requests from the current instance'
+      },
+      {
+        uri: `servicenow://${currentInstance.name}/cases`,
+        mimeType: 'application/json',
+        name: `Active Cases (${currentInstance.name})`,
+        description: 'List of active Customer Service cases from the current instance'
       }
     ];
 
@@ -309,7 +315,17 @@ export function createResourceHandlers(serviceNowClient, configManager, tableMet
         return formatResource(changes, `Active change requests from ${instanceName}`);
       }
 
-      throw new Error(`Unknown resource path: ${resource}. Available resources: info, incidents, users, update-sets, groups, change-requests`);
+      // Resource: servicenow://[instance]/cases
+      if (resource === 'cases') {
+        const cases = await serviceNowClient.getRecords('sn_customerservice_case', {
+          sysparm_query: 'active=true',
+          sysparm_limit: 25,
+          sysparm_fields: 'number,short_description,state,priority,account,contact,sys_created_on'
+        });
+        return formatResource(cases, `Active CSM cases from ${instanceName}`);
+      }
+
+      throw new Error(`Unknown resource path: ${resource}. Available resources: info, incidents, users, update-sets, groups, change-requests, cases`);
     } finally {
       // Restore original instance if we switched
       if (instanceName !== originalInstance.name) {

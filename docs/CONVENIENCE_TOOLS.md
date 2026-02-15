@@ -5,7 +5,7 @@
 Convenience tools provide a better user experience by accepting human-readable identifiers (like incident numbers) instead of technical sys_ids. These tools are wrappers around the generic `SN-Update-Record` tool with built-in validation and user/group resolution.
 
 **Total Convenience Tools Added:** 10
-**New Total MCP Tools:** 44 (up from 34)
+**New Total MCP Tools:** 48 (up from 44)
 
 ---
 
@@ -566,15 +566,16 @@ Potential additional convenience tools:
 - Incident Tools: 5
 - Change Request Tools: 3
 - Problem Tools: 2
-- **Total New Tools: 10**
-- **Total MCP Tools: 44**
+- Case Management Tools: 4
+- **Total New Tools: 14**
+- **Total MCP Tools: 48**
 
 **Tool Categories:**
 - Generic CRUD: 6 tools (Query, Create, Get, Update, Schema, List Tables)
 - Update Set Management: 6 tools
 - Workflow Tools: 4 tools
 - Batch Operations: 2 tools
-- ITSM Convenience: 10 tools (NEW)
+- ITSM & CSM: 14 tools (NEW)
 - Other Specialized: 16 tools
 
 ---

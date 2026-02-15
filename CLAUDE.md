@@ -35,8 +35,9 @@
 - `SN-List-Available-Tables` - List all available tables
 
 ### Specialized Tables (Convenience)
-**ITSM:**
+**ITSM & CSM:**
 - `SN-List-Incidents`, `SN-Create-Incident`, `SN-Get-Incident`
+- `SN-List-Cases`, `SN-Create-Case`, `SN-Get-Case`, `SN-Update-Case`
 - `SN-List-ChangeRequests`
 - `SN-List-Problems`
 

@@ -173,14 +173,14 @@ curl http://localhost:3000/instances
 
 ## 📊 Comprehensive ServiceNow Coverage
 
-### 🎯 **44 MCP Tools** Supporting **160+ ServiceNow Tables**
+### 🎯 **48 MCP Tools** Supporting **160+ ServiceNow Tables**
 
 *Generic tools work on any ServiceNow table through dynamic schema discovery*
 
 | **Tool Category** | **Tools** | **What They Do** |
 |-------------------|-----------|------------------|
 | **Generic CRUD** | 7 tools | Query, Create, Get, Update on **any** table |
-| **Specialized ITSM** | 8 tools | Incident, Change, Problem convenience wrappers |
+| **Specialized ITSM & CSM** | 12 tools | Incident, Case, Change, Problem convenience wrappers |
 | **Convenience Tools** | 10 tools | Add-Comment, Add-Work-Notes, Assign, Resolve, Close operations |
 | **Natural Language** | 1 tool | Query using plain English instead of encoded queries |
 | **Update Set Management** | 6 tools | Set, list, move, clone, inspect update sets |
@@ -372,7 +372,7 @@ SN-Incident-Close({
 ### 📋 **Complete Table Coverage**
 
 **Core Service Management:**
-`incident` • `change_request` • `change_task` • `problem` • `problem_task` • `sc_request` • `sc_req_item` • `sysapproval_approver`
+`incident` • `sn_customerservice_case` • `change_request` • `change_task` • `problem` • `problem_task` • `sc_request` • `sc_req_item` • `sysapproval_approver`
 
 **Service Catalog:**
 `sc_cat_item` • `sc_category` • `item_option_new` • `catalog_ui_policy` • `catalog_ui_policy_action`
@@ -567,7 +567,7 @@ DEBUG=true npm run dev
 - **Memory usage:** ~50MB baseline per instance
 - **Concurrent sessions:** 100+ supported
 - **Background scripts:** Execute in ~1 second via sys_trigger
-- **MCP Tools:** 44 total (34 tools + 10 convenience tools)
+- **MCP Tools:** 48 total (38 tools + 10 convenience tools)
 - **MCP Resources:** 8 read-only resource URIs
 - **Natural Language Patterns:** 15+ supported query patterns
 - **Convenience Operations:** 10+ specialized ITSM operations (5 operations × 3 table types)
