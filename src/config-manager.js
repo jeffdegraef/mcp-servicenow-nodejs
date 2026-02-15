@@ -19,45 +19,94 @@ export class ConfigManager {
   }
 
   /**
-   * Load instances from JSON config file
+   * Load instances from JSON config file and environment variables
    */
   loadInstances() {
     if (this.instances) {
       return this.instances;
     }
 
-    try {
-      const configData = fs.readFileSync(this.configPath, 'utf8');
-      const config = JSON.parse(configData);
-      this.instances = config.instances;
-      return this.instances;
-    } catch (error) {
-      // Fallback to .env if config file doesn't exist
-      if (error.code === 'ENOENT') {
-        console.warn('⚠️  servicenow-instances.json not found, falling back to .env');
-        return this.loadFromEnv();
-      }
-      throw new Error(`Failed to load ServiceNow instances config: ${error.message}`);
+    let allInstances = [];
+
+    // 1. Try to load from environment variables first (most secure local option)
+    const envInstance = this.getEnvInstance();
+    if (envInstance) {
+      allInstances.push(envInstance);
     }
+
+    // 2. Try to load from JSON config file
+    try {
+      if (fs.existsSync(this.configPath)) {
+        const configData = fs.readFileSync(this.configPath, 'utf8');
+        const config = JSON.parse(configData);
+        if (config.instances && Array.isArray(config.instances)) {
+          // If we have an env instance, it takes precedence as default
+          const jsonInstances = config.instances.map(inst => {
+            if (envInstance && (inst.name === envInstance.name || inst.url === envInstance.url)) {
+              // Skip if it overlaps with env instance, env wins
+              return null;
+            }
+            // If env exists, make sure json instances aren't marked as default unless env isn't default
+            if (envInstance && envInstance.default) {
+                return { ...inst, default: false };
+            }
+            return inst;
+          }).filter(Boolean);
+          
+          allInstances = [...allInstances, ...jsonInstances];
+        }
+      }
+    } catch (error) {
+      // If we couldn't load JSON but have ENV, just log a warning
+      if (allInstances.length > 0) {
+        console.warn(`⚠️  Warning: Could not read ${this.configPath}: ${error.message}`);
+      } else {
+        throw new Error(`Failed to load ServiceNow instances config: ${error.message}`);
+      }
+    }
+
+    if (allInstances.length === 0) {
+      throw new Error('Missing ServiceNow credentials. Please set SERVICENOW_INSTANCE_URL, SERVICENOW_USERNAME, and SERVICENOW_PASSWORD in your .env file.');
+    }
+
+    // Ensure at least one instance is marked as default
+    const hasDefault = allInstances.some(i => i.default === true);
+    if (!hasDefault) {
+      allInstances[0].default = true;
+    }
+
+    this.instances = allInstances;
+    return this.instances;
+  }
+
+  /**
+   * Helper to get instance from environment variables
+   */
+  getEnvInstance() {
+    if (process.env.SERVICENOW_INSTANCE_URL && process.env.SERVICENOW_USERNAME && process.env.SERVICENOW_PASSWORD) {
+      return {
+        name: process.env.SERVICENOW_INSTANCE_NAME || 'default',
+        url: process.env.SERVICENOW_INSTANCE_URL,
+        username: process.env.SERVICENOW_USERNAME,
+        password: process.env.SERVICENOW_PASSWORD,
+        default: true,
+        description: 'Loaded from .env'
+      };
+    }
+    return null;
   }
 
   /**
    * Fallback: Load single instance from .env file (backward compatibility)
+   * @deprecated Use loadInstances()
    */
   loadFromEnv() {
-    if (!process.env.SERVICENOW_INSTANCE_URL || !process.env.SERVICENOW_USERNAME || !process.env.SERVICENOW_PASSWORD) {
-      throw new Error('Missing ServiceNow credentials. Create config/servicenow-instances.json or set SERVICENOW_INSTANCE_URL, SERVICENOW_USERNAME, SERVICENOW_PASSWORD in .env');
+    const envInstance = this.getEnvInstance();
+    if (!envInstance) {
+      throw new Error('Missing ServiceNow credentials in environment variables.');
     }
 
-    this.instances = [{
-      name: 'default',
-      url: process.env.SERVICENOW_INSTANCE_URL,
-      username: process.env.SERVICENOW_USERNAME,
-      password: process.env.SERVICENOW_PASSWORD,
-      default: true,
-      description: 'Loaded from .env'
-    }];
-
+    this.instances = [envInstance];
     return this.instances;
   }
 

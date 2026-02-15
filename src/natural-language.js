@@ -339,7 +339,7 @@ export function parseNaturalLanguage(query, table = 'incident') {
 
   // Clean up remaining query
   remainingQuery = remainingQuery
-    .replace(/\b(and|or|with|in|the|a|an)\b/gi, ' ')
+    .replace(/\b(show|list|find|get|all|cases|incidents|problems|changes|tickets|and|or|with|in|the|a|an)\b/gi, ' ')
     .replace(/\s+/g, ' ')
     .trim();
 

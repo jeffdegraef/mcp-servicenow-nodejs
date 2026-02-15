@@ -1,7 +1,7 @@
 <div align="center">
   <img src="assets/logo.svg" alt="ServiceNow MCP Server" width="200"/>
 
-  # ServiceNow MCP Server v2.1.5
+  # ServiceNow MCP Server v2.1.9
 
   **Multi-Instance Intelligent Architecture**
 
@@ -29,6 +29,14 @@
 - **🎨 Local Script Development**: Sync scripts with Git, watch mode for continuous development
 - **🗣️ Natural Language Search**: Query ServiceNow using plain English queries
 - **📚 MCP Resources**: 8 read-only resource URIs for quick lookups and documentation
+
+## 🆕 What's New in v2.1.9
+
+**February 2026 Release**
+
+- 🔒 **Enhanced Credential Security**: refactored `ConfigManager` to prioritize local `.env` files for sensitive credentials (URL, username, password).
+- 🛡️ **Git Protection**: Automatically excludes `config/servicenow-instances.json` from Git tracking to prevent accidental credential leaks to GitHub.
+- 🗣️ **NL Search Improvements**: Enhanced natural language parsing to better handle common search prefixes like "show", "find", and "list".
 
 ## 🆕 What's New in v2.1.5
 
