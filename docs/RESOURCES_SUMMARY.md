@@ -102,3 +102,14 @@ See `/docs/RESOURCES_IMPLEMENTATION.md` for complete details including:
 - Error handling
 - Performance considerations
 - Future enhancements
+
+## Knowledge Base (Local RAG)
+
+The server now includes a local Retrieval-Augmented Generation (RAG) system.
+
+- **Source:** `knowledge/servicenow/*.txt`
+- **Database:** `knowledge/lancedb/`
+- **Embedding Model:** `Xenova/all-MiniLM-L6-v2`
+- **Ingestion Script:** `scripts/ingest-knowledge.js`
+
+This system enables semantic search across technical documentation without external API calls.

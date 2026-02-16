@@ -36,6 +36,9 @@ Table-specific list operations for core ITSM and CSM tables
 ### 📦 **Customer Service Management (CSM)** (4 tools)
 Specialized tools for Case Management (sn_customerservice_case)
 
+### 🧠 **Knowledge Base** (1 tool)
+Semantic search for local ServiceNow technical documentation
+
 ### 🎫 **Incident Management Convenience Tools** (5 tools)
 User-friendly incident operations accepting incident numbers
 
@@ -473,7 +476,31 @@ Update a Case by sys_id.
 
 ---
 
-## Problem Management Convenience Tools
+## Knowledge Base
+
+### SN-Search-Knowledge
+
+Search the local ServiceNow knowledge base (Zurich documentation) using vector search (RAG).
+
+**Parameters:**
+```javascript
+{
+  "query": "How do I configure Service Bridge?", // Required: Search query
+  "limit": 5                                     // Optional: Max results (default: 5)
+}
+```
+
+**Example:**
+```javascript
+SN-Search-Knowledge({
+  "query": "What are the new features in Field Service Management?",
+  "limit": 3
+})
+```
+
+---
+
+## Incident Management Convenience Tools
 
 User-friendly tools for managing problems.
 

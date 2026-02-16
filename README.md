@@ -35,6 +35,8 @@
 **February 2026 Release**
 
 - 📦 **Case Management (CSM)**: Added 4 specialized tools for Customer Service Management (`SN-List-Cases`, `SN-Create-Case`, `SN-Get-Case`, `SN-Update-Case`).
+- 🧠 **Local RAG Knowledge Base**: Integrated a local vector database (LanceDB) to perform semantic searches across ServiceNow technical documentation.
+- 🔍 **New Knowledge Tool**: Added `SN-Search-Knowledge` to retrieve context-aware answers from local documentation.
 - 🔒 **Enhanced Credential Security**: refactored `ConfigManager` to prioritize local `.env` files for sensitive credentials (URL, username, password).
 - 🛡️ **Git Protection**: Automatically excludes `config/servicenow-instances.json` from Git tracking to prevent accidental credential leaks to GitHub.
 - 🗣️ **NL Search Improvements**: Enhanced natural language parsing to better handle common search prefixes like "show", "find", and "list".
@@ -320,6 +322,29 @@ SN-Natural-Language-Search({
 - Use NL search for quick exploratory queries
 - Use encoded queries for complex automation
 - NL search translates to encoded queries automatically
+
+### 🧠 **Local RAG Knowledge Base (NEW!)**
+
+A powerful retrieval-augmented generation (RAG) system running entirely locally:
+
+```javascript
+// Search technical documentation
+SN-Search-Knowledge({
+  "query": "How do I configure Service Bridge for providers?",
+  "limit": 3
+})
+```
+
+**Features:**
+- **Vector Search:** Uses `all-MiniLM-L6-v2` embeddings for semantic understanding
+- **Local Database:** Stores vectors in LanceDB (no external API calls required)
+- **Context-Aware:** Returns relevant documentation chunks to ground AI responses
+- **Privacy First:** All documentation processing happens on your machine
+
+**Setup:**
+1. Place PDF/Text docs in `knowledge/servicenow/`
+2. Run ingestion: `node scripts/ingest-knowledge.js`
+3. Use the tool!
 
 ### ⚡ **Convenience Tools (NEW!)**
 

@@ -204,19 +204,144 @@
     "description": "ServiceNow Sc Category table"
   },
   "sc_request": {
-    "label": "Sc Request",
+    "label": "Request",
     "table": "sc_request",
+    "key_field": "number",
+    "display_field": "short_description",
+    "required_fields": [
+      "requested_for"
+    ],
+    "common_fields": [
+      "sys_created_on",
+      "sys_updated_on",
+      "sys_created_by",
+      "sys_updated_by",
+      "number",
+      "requested_for",
+      "opened_by",
+      "approval",
+      "request_state",
+      "stage",
+      "short_description",
+      "description",
+      "price",
+      "active"
+    ],
+    "operations": [
+      "create",
+      "read",
+      "update",
+      "list",
+      "search"
+    ],
+    "priority": 2,
+    "package": "service_desk",
+    "description": "ServiceNow Sc Request table",
+    "field_metadata": {
+      "requested_for": {
+        "label": "Requested for",
+        "required": true,
+        "max_length": "32",
+        "reference": "sys_user"
+      },
+      "opened_by": {
+        "label": "Opened by",
+        "required": false,
+        "max_length": "32",
+        "reference": "sys_user"
+      }
+    }
+  },
+  "sc_req_item": {
+    "label": "Requested Item",
+    "table": "sc_req_item",
+    "key_field": "number",
+    "display_field": "short_description",
+    "required_fields": [
+      "request",
+      "cat_item"
+    ],
+    "common_fields": [
+      "sys_created_on",
+      "sys_updated_on",
+      "sys_created_by",
+      "sys_updated_by",
+      "number",
+      "request",
+      "cat_item",
+      "requested_for",
+      "state",
+      "stage",
+      "short_description",
+      "description",
+      "assigned_to",
+      "assignment_group",
+      "active"
+    ],
+    "operations": [
+      "create",
+      "read",
+      "update",
+      "list",
+      "search"
+    ],
+    "priority": 2,
+    "package": "service_desk",
+    "description": "ServiceNow Sc Req Item table",
+    "field_metadata": {
+      "request": {
+        "label": "Request",
+        "required": true,
+        "max_length": "32",
+        "reference": "sc_request"
+      },
+      "cat_item": {
+        "label": "Catalog Item",
+        "required": true,
+        "max_length": "32",
+        "reference": "sc_cat_item"
+      },
+      "requested_for": {
+        "label": "Requested for",
+        "required": false,
+        "max_length": "32",
+        "reference": "sys_user"
+      },
+      "assigned_to": {
+        "label": "Assigned to",
+        "required": false,
+        "max_length": "32",
+        "reference": "sys_user"
+      },
+      "assignment_group": {
+        "label": "Assignment group",
+        "required": false,
+        "max_length": "32",
+        "reference": "sys_user_group"
+      }
+    }
+  },
+  "csm_consumer": {
+    "label": "Consumer",
+    "table": "csm_consumer",
     "key_field": "number",
     "display_field": "name",
     "required_fields": [
-      "name"
+      "last_name"
     ],
     "common_fields": [
       "sys_created_on",
       "sys_updated_on",
       "sys_created_by",
       "sys_updated_by",
+      "number",
       "name",
+      "first_name",
+      "last_name",
+      "email",
+      "mobile_phone",
+      "business_phone",
+      "user",
       "active"
     ],
     "operations": [
@@ -228,34 +353,15 @@
     ],
     "priority": 2,
     "package": "service_desk",
-    "description": "ServiceNow Sc Request table"
-  },
-  "sc_req_item": {
-    "label": "Sc Req Item",
-    "table": "sc_req_item",
-    "key_field": "sys_id",
-    "display_field": "name",
-    "required_fields": [
-      "name"
-    ],
-    "common_fields": [
-      "sys_created_on",
-      "sys_updated_on",
-      "sys_created_by",
-      "sys_updated_by",
-      "name",
-      "active"
-    ],
-    "operations": [
-      "create",
-      "read",
-      "update",
-      "list",
-      "search"
-    ],
-    "priority": 2,
-    "package": "service_desk",
-    "description": "ServiceNow Sc Req Item table"
+    "description": "ServiceNow CSM Consumer table",
+    "field_metadata": {
+      "user": {
+        "label": "User",
+        "required": false,
+        "max_length": "32",
+        "reference": "sys_user"
+      }
+    }
   },
   "item_option_new": {
     "label": "Item Option New",
@@ -285,20 +391,33 @@
     "description": "ServiceNow Item Option New table"
   },
   "sys_user": {
-    "label": "Sys User",
+    "label": "User",
     "table": "sys_user",
-    "key_field": "sys_id",
+    "key_field": "user_name",
     "display_field": "name",
     "required_fields": [
-      "user_name"
+      "user_name",
+      "last_name"
     ],
     "common_fields": [
       "sys_created_on",
       "sys_updated_on",
       "sys_created_by",
       "sys_updated_by",
+      "user_name",
       "name",
-      "active"
+      "first_name",
+      "last_name",
+      "email",
+      "phone",
+      "mobile_phone",
+      "title",
+      "department",
+      "manager",
+      "company",
+      "location",
+      "active",
+      "vip"
     ],
     "operations": [
       "create",
@@ -309,10 +428,36 @@
     ],
     "priority": 1,
     "package": "service_desk",
-    "description": "ServiceNow Sys User table"
+    "description": "ServiceNow Sys User table",
+    "field_metadata": {
+      "manager": {
+        "label": "Manager",
+        "required": false,
+        "max_length": "32",
+        "reference": "sys_user"
+      },
+      "department": {
+        "label": "Department",
+        "required": false,
+        "max_length": "32",
+        "reference": "cmn_department"
+      },
+      "company": {
+        "label": "Company",
+        "required": false,
+        "max_length": "32",
+        "reference": "core_company"
+      },
+      "location": {
+        "label": "Location",
+        "required": false,
+        "max_length": "32",
+        "reference": "cmn_location"
+      }
+    }
   },
   "sys_user_group": {
-    "label": "Sys User Group",
+    "label": "Group",
     "table": "sys_user_group",
     "key_field": "sys_id",
     "display_field": "name",
@@ -325,7 +470,11 @@
       "sys_created_by",
       "sys_updated_by",
       "name",
-      "active"
+      "email",
+      "manager",
+      "description",
+      "active",
+      "parent"
     ],
     "operations": [
       "create",
@@ -336,7 +485,21 @@
     ],
     "priority": 1,
     "package": "service_desk",
-    "description": "ServiceNow Sys User Group table"
+    "description": "ServiceNow Sys User Group table",
+    "field_metadata": {
+      "manager": {
+        "label": "Manager",
+        "required": false,
+        "max_length": "32",
+        "reference": "sys_user"
+      },
+      "parent": {
+        "label": "Parent",
+        "required": false,
+        "max_length": "32",
+        "reference": "sys_user_group"
+      }
+    }
   },
   "sys_user_grmember": {
     "label": "Sys User Grmember",
@@ -2571,5 +2734,572 @@
     "priority": 3,
     "package": "service_desk",
     "description": "ServiceNow Attachment table"
+  },
+  "sn_customerservice_case": {
+    "label": "Customer Service Case",
+    "table": "sn_customerservice_case",
+    "key_field": "number",
+    "display_field": "short_description",
+    "required_fields": [
+      "short_description"
+    ],
+    "common_fields": [
+      "sys_created_on",
+      "sys_updated_on",
+      "sys_created_by",
+      "sys_updated_by",
+      "number",
+      "state",
+      "priority",
+      "urgency",
+      "impact",
+      "category",
+      "subcategory",
+      "account",
+      "contact",
+      "consumer",
+      "assignment_group",
+      "assigned_to",
+      "short_description",
+      "description",
+      "work_notes",
+      "close_notes"
+    ],
+    "operations": [
+      "create",
+      "read",
+      "update",
+      "list",
+      "search"
+    ],
+    "priority": 2,
+    "package": "service_desk",
+    "description": "ServiceNow Customer Service Case table (CSM)",
+    "field_metadata": {
+      "account": {
+        "label": "Account",
+        "required": false,
+        "max_length": "32",
+        "reference": "customer_account"
+      },
+      "contact": {
+        "label": "Contact",
+        "required": false,
+        "max_length": "32",
+        "reference": "customer_contact"
+      },
+      "consumer": {
+        "label": "Consumer",
+        "required": false,
+        "max_length": "32",
+        "reference": "csm_consumer"
+      },
+      "product": {
+        "label": "Product",
+        "required": false,
+        "max_length": "32",
+        "reference": "cmdb_model"
+      },
+      "asset": {
+        "label": "Asset",
+        "required": false,
+        "max_length": "32",
+        "reference": "alm_asset"
+      },
+      "incident": {
+        "label": "Incident",
+        "required": false,
+        "max_length": "32",
+        "reference": "incident"
+      },
+      "problem": {
+        "label": "Problem",
+        "required": false,
+        "max_length": "32",
+        "reference": "problem"
+      },
+      "change": {
+        "label": "Change Request",
+        "required": false,
+        "max_length": "32",
+        "reference": "change_request"
+      },
+      "partner": {
+        "label": "Partner",
+        "required": false,
+        "max_length": "32",
+        "reference": "customer_account"
+      },
+      "service": {
+        "label": "Service",
+        "required": false,
+        "max_length": "32",
+        "reference": "sn_case_type_selection"
+      },
+      "state": {
+        "label": "State",
+        "required": false,
+        "max_length": "40",
+        "reference": ""
+      },
+      "priority": {
+        "label": "Priority",
+        "required": false,
+        "max_length": "40",
+        "reference": ""
+      }
+    }
+  },
+  "customer_account": {
+    "label": "Account",
+    "table": "customer_account",
+    "key_field": "number",
+    "display_field": "name",
+    "required_fields": [
+      "name"
+    ],
+    "common_fields": [
+      "sys_created_on",
+      "sys_updated_on",
+      "sys_created_by",
+      "sys_updated_by",
+      "number",
+      "name",
+      "email",
+      "phone",
+      "website",
+      "industry",
+      "primary_contact",
+      "account_parent",
+      "partner"
+    ],
+    "operations": [
+      "create",
+      "read",
+      "update",
+      "list",
+      "search"
+    ],
+    "priority": 2,
+    "package": "service_desk",
+    "description": "ServiceNow Customer Account table (CSM)",
+    "field_metadata": {
+      "primary_contact": {
+        "label": "Primary Contact",
+        "required": false,
+        "max_length": "32",
+        "reference": "customer_contact"
+      },
+      "account_parent": {
+        "label": "Parent Account",
+        "required": false,
+        "max_length": "32",
+        "reference": "customer_account"
+      }
+    }
+  },
+  "customer_contact": {
+    "label": "Contact",
+    "table": "customer_contact",
+    "key_field": "user_name",
+    "display_field": "name",
+    "required_fields": [
+      "user_name",
+      "last_name",
+      "account"
+    ],
+    "common_fields": [
+      "sys_created_on",
+      "sys_updated_on",
+      "sys_created_by",
+      "sys_updated_by",
+      "user_name",
+      "name",
+      "first_name",
+      "last_name",
+      "email",
+      "phone",
+      "mobile_phone",
+      "account",
+      "active",
+      "vip"
+    ],
+    "operations": [
+      "create",
+      "read",
+      "update",
+      "list",
+      "search"
+    ],
+    "priority": 2,
+    "package": "service_desk",
+    "description": "ServiceNow Customer Contact table (CSM)",
+    "field_metadata": {
+      "account": {
+        "label": "Account",
+        "required": true,
+        "max_length": "32",
+        "reference": "customer_account"
+      },
+      "manager": {
+        "label": "Manager",
+        "required": false,
+        "max_length": "32",
+        "reference": "sys_user"
+      }
+    }
+  },
+  "sc_request": {
+    "label": "Request",
+    "table": "sc_request",
+    "key_field": "number",
+    "display_field": "short_description",
+    "required_fields": [
+      "requested_for"
+    ],
+    "common_fields": [
+      "sys_created_on",
+      "sys_updated_on",
+      "sys_created_by",
+      "sys_updated_by",
+      "number",
+      "requested_for",
+      "opened_by",
+      "approval",
+      "request_state",
+      "stage",
+      "short_description",
+      "description",
+      "price",
+      "active"
+    ],
+    "operations": [
+      "create",
+      "read",
+      "update",
+      "list",
+      "search"
+    ],
+    "priority": 2,
+    "package": "service_desk",
+    "description": "ServiceNow Sc Request table",
+    "field_metadata": {
+      "requested_for": {
+        "label": "Requested for",
+        "required": true,
+        "max_length": "32",
+        "reference": "sys_user"
+      },
+      "opened_by": {
+        "label": "Opened by",
+        "required": false,
+        "max_length": "32",
+        "reference": "sys_user"
+      }
+    }
+  },
+  "sc_req_item": {
+    "label": "Requested Item",
+    "table": "sc_req_item",
+    "key_field": "number",
+    "display_field": "short_description",
+    "required_fields": [
+      "request",
+      "cat_item"
+    ],
+    "common_fields": [
+      "sys_created_on",
+      "sys_updated_on",
+      "sys_created_by",
+      "sys_updated_by",
+      "number",
+      "request",
+      "cat_item",
+      "requested_for",
+      "state",
+      "stage",
+      "short_description",
+      "description",
+      "assigned_to",
+      "assignment_group",
+      "active"
+    ],
+    "operations": [
+      "create",
+      "read",
+      "update",
+      "list",
+      "search"
+    ],
+    "priority": 2,
+    "package": "service_desk",
+    "description": "ServiceNow Sc Req Item table",
+    "field_metadata": {
+      "request": {
+        "label": "Request",
+        "required": true,
+        "max_length": "32",
+        "reference": "sc_request"
+      },
+      "cat_item": {
+        "label": "Catalog Item",
+        "required": true,
+        "max_length": "32",
+        "reference": "sc_cat_item"
+      },
+      "requested_for": {
+        "label": "Requested for",
+        "required": false,
+        "max_length": "32",
+        "reference": "sys_user"
+      },
+      "assigned_to": {
+        "label": "Assigned to",
+        "required": false,
+        "max_length": "32",
+        "reference": "sys_user"
+      },
+      "assignment_group": {
+        "label": "Assignment group",
+        "required": false,
+        "max_length": "32",
+        "reference": "sys_user_group"
+      }
+    }
+  },
+  "csm_consumer": {
+    "label": "Consumer",
+    "table": "csm_consumer",
+    "key_field": "number",
+    "display_field": "name",
+    "required_fields": [
+      "last_name"
+    ],
+    "common_fields": [
+      "sys_created_on",
+      "sys_updated_on",
+      "sys_created_by",
+      "sys_updated_by",
+      "number",
+      "name",
+      "first_name",
+      "last_name",
+      "email",
+      "mobile_phone",
+      "business_phone",
+      "user",
+      "active"
+    ],
+    "operations": [
+      "create",
+      "read",
+      "update",
+      "list",
+      "search"
+    ],
+    "priority": 2,
+    "package": "service_desk",
+    "description": "ServiceNow CSM Consumer table",
+    "field_metadata": {
+      "user": {
+        "label": "User",
+        "required": false,
+        "max_length": "32",
+        "reference": "sys_user"
+      }
+    }
+  },
+  "sc_task": {
+    "label": "Catalog Task",
+    "table": "sc_task",
+    "key_field": "number",
+    "display_field": "short_description",
+    "required_fields": [
+      "request_item"
+    ],
+    "common_fields": [
+      "sys_created_on",
+      "sys_updated_on",
+      "sys_created_by",
+      "sys_updated_by",
+      "number",
+      "request_item",
+      "request",
+      "cat_item",
+      "state",
+      "short_description",
+      "description",
+      "assigned_to",
+      "assignment_group",
+      "active"
+    ],
+    "operations": [
+      "create",
+      "read",
+      "update",
+      "list",
+      "search"
+    ],
+    "priority": 2,
+    "package": "service_desk",
+    "description": "ServiceNow Sc Task table",
+    "field_metadata": {
+      "request_item": {
+        "label": "Request item",
+        "required": true,
+        "max_length": "32",
+        "reference": "sc_req_item"
+      },
+      "request": {
+        "label": "Request",
+        "required": false,
+        "max_length": "32",
+        "reference": "sc_request"
+      },
+      "cat_item": {
+        "label": "Catalog Item",
+        "required": false,
+        "max_length": "32",
+        "reference": "sc_cat_item"
+      },
+      "assigned_to": {
+        "label": "Assigned to",
+        "required": false,
+        "max_length": "32",
+        "reference": "sys_user"
+      },
+      "assignment_group": {
+        "label": "Assignment group",
+        "required": false,
+        "max_length": "32",
+        "reference": "sys_user_group"
+      }
+    }
+  },
+  "wm_order": {
+    "label": "Work Order",
+    "table": "wm_order",
+    "key_field": "number",
+    "display_field": "short_description",
+    "required_fields": [],
+    "common_fields": [
+      "sys_created_on",
+      "sys_updated_on",
+      "sys_created_by",
+      "sys_updated_by",
+      "number",
+      "state",
+      "priority",
+      "account",
+      "contact",
+      "location",
+      "short_description",
+      "description",
+      "assigned_to",
+      "assignment_group",
+      "active"
+    ],
+    "operations": [
+      "create",
+      "read",
+      "update",
+      "list",
+      "search"
+    ],
+    "priority": 2,
+    "package": "field_service",
+    "description": "ServiceNow Work Order table (FSM)",
+    "field_metadata": {
+      "account": {
+        "label": "Account",
+        "required": false,
+        "max_length": "32",
+        "reference": "customer_account"
+      },
+      "contact": {
+        "label": "Contact",
+        "required": false,
+        "max_length": "32",
+        "reference": "customer_contact"
+      },
+      "location": {
+        "label": "Location",
+        "required": false,
+        "max_length": "32",
+        "reference": "cmn_location"
+      },
+      "assigned_to": {
+        "label": "Assigned to",
+        "required": false,
+        "max_length": "32",
+        "reference": "sys_user"
+      },
+      "assignment_group": {
+        "label": "Assignment group",
+        "required": false,
+        "max_length": "32",
+        "reference": "sys_user_group"
+      }
+    }
+  },
+  "wm_task": {
+    "label": "Work Order Task",
+    "table": "wm_task",
+    "key_field": "number",
+    "display_field": "short_description",
+    "required_fields": [
+      "work_order"
+    ],
+    "common_fields": [
+      "sys_created_on",
+      "sys_updated_on",
+      "sys_created_by",
+      "sys_updated_by",
+      "number",
+      "work_order",
+      "state",
+      "priority",
+      "location",
+      "short_description",
+      "assigned_to",
+      "assignment_group",
+      "active"
+    ],
+    "operations": [
+      "create",
+      "read",
+      "update",
+      "list",
+      "search"
+    ],
+    "priority": 2,
+    "package": "field_service",
+    "description": "ServiceNow Work Order Task table (FSM)",
+    "field_metadata": {
+      "work_order": {
+        "label": "Work order",
+        "required": true,
+        "max_length": "32",
+        "reference": "wm_order"
+      },
+      "location": {
+        "label": "Location",
+        "required": false,
+        "max_length": "32",
+        "reference": "cmn_location"
+      },
+      "assigned_to": {
+        "label": "Assigned to",
+        "required": false,
+        "max_length": "32",
+        "reference": "sys_user"
+      },
+      "assignment_group": {
+        "label": "Assignment group",
+        "required": false,
+        "max_length": "32",
+        "reference": "sys_user_group"
+      }
+    }
   }
 }

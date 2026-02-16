@@ -102,3 +102,24 @@ SERVICENOW_PASSWORD=$h4fG+9nAGeU
 PORT=3000
 DEBUG=true
 ```
+
+## Knowledge Base Setup (Local RAG)
+
+To enable vector search for technical documentation:
+
+1.  **Install Dependencies:**
+    ```bash
+    npm install @lancedb/lancedb @xenova/transformers
+    ```
+
+2.  **Add Documentation:**
+    Place your documentation files (PDFs, Markdown, or Text) in `knowledge/servicenow/`.
+    *Note: If using PDFs, you may need to convert them to text using `convert_pdfs.py`.*
+
+3.  **Run Ingestion:**
+    ```bash
+    node scripts/ingest-knowledge.js
+    ```
+
+4.  **Verify:**
+    The system will create a local LanceDB database in `knowledge/lancedb/` and you can use the `SN-Search-Knowledge` tool.

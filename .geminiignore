@@ -1,0 +1,6 @@
+# Ignore large knowledge base files from automatic indexing
+knowledge/servicenow/*.txt
+knowledge/servicenow/*.pdf
+# Keep the map and readme visible
+!knowledge/servicenow/CONTENT_MAP.md
+!knowledge/servicenow/README.md

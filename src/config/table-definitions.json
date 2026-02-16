@@ -202,19 +202,27 @@
     "description": "ServiceNow Sc Category table"
   },
   "sc_request": {
-    "label": "Sc Request",
+    "label": "Request",
     "table": "sc_request",
     "key_field": "number",
-    "display_field": "name",
+    "display_field": "short_description",
     "required_fields": [
-      "name"
+      "requested_for"
     ],
     "common_fields": [
       "sys_created_on",
       "sys_updated_on",
       "sys_created_by",
       "sys_updated_by",
-      "name",
+      "number",
+      "requested_for",
+      "opened_by",
+      "approval",
+      "request_state",
+      "stage",
+      "short_description",
+      "description",
+      "price",
       "active"
     ],
     "operations": [
@@ -229,19 +237,29 @@
     "description": "ServiceNow Sc Request table"
   },
   "sc_req_item": {
-    "label": "Sc Req Item",
+    "label": "Requested Item",
     "table": "sc_req_item",
-    "key_field": "sys_id",
-    "display_field": "name",
+    "key_field": "number",
+    "display_field": "short_description",
     "required_fields": [
-      "name"
+      "request",
+      "cat_item"
     ],
     "common_fields": [
       "sys_created_on",
       "sys_updated_on",
       "sys_created_by",
       "sys_updated_by",
-      "name",
+      "number",
+      "request",
+      "cat_item",
+      "requested_for",
+      "state",
+      "stage",
+      "short_description",
+      "description",
+      "assigned_to",
+      "assignment_group",
       "active"
     ],
     "operations": [
@@ -254,6 +272,40 @@
     "priority": 2,
     "package": "service_desk",
     "description": "ServiceNow Sc Req Item table"
+  },
+  "csm_consumer": {
+    "label": "Consumer",
+    "table": "csm_consumer",
+    "key_field": "number",
+    "display_field": "name",
+    "required_fields": [
+      "last_name"
+    ],
+    "common_fields": [
+      "sys_created_on",
+      "sys_updated_on",
+      "sys_created_by",
+      "sys_updated_by",
+      "number",
+      "name",
+      "first_name",
+      "last_name",
+      "email",
+      "mobile_phone",
+      "business_phone",
+      "user",
+      "active"
+    ],
+    "operations": [
+      "create",
+      "read",
+      "update",
+      "list",
+      "search"
+    ],
+    "priority": 2,
+    "package": "service_desk",
+    "description": "ServiceNow CSM Consumer table"
   },
   "item_option_new": {
     "label": "Item Option New",
@@ -283,20 +335,33 @@
     "description": "ServiceNow Item Option New table"
   },
   "sys_user": {
-    "label": "Sys User",
+    "label": "User",
     "table": "sys_user",
-    "key_field": "sys_id",
+    "key_field": "user_name",
     "display_field": "name",
     "required_fields": [
-      "user_name"
+      "user_name",
+      "last_name"
     ],
     "common_fields": [
       "sys_created_on",
       "sys_updated_on",
       "sys_created_by",
       "sys_updated_by",
+      "user_name",
       "name",
-      "active"
+      "first_name",
+      "last_name",
+      "email",
+      "phone",
+      "mobile_phone",
+      "title",
+      "department",
+      "manager",
+      "company",
+      "location",
+      "active",
+      "vip"
     ],
     "operations": [
       "create",
@@ -310,7 +375,7 @@
     "description": "ServiceNow Sys User table"
   },
   "sys_user_group": {
-    "label": "Sys User Group",
+    "label": "Group",
     "table": "sys_user_group",
     "key_field": "sys_id",
     "display_field": "name",
@@ -323,7 +388,11 @@
       "sys_created_by",
       "sys_updated_by",
       "name",
-      "active"
+      "email",
+      "manager",
+      "description",
+      "active",
+      "parent"
     ],
     "operations": [
       "create",
@@ -4677,5 +4746,326 @@
       "search"
     ],
     "discovered": true
+  },
+  "sn_customerservice_case": {
+    "label": "Customer Service Case",
+    "table": "sn_customerservice_case",
+    "key_field": "number",
+    "display_field": "short_description",
+    "required_fields": [
+      "short_description"
+    ],
+    "common_fields": [
+      "sys_created_on",
+      "sys_updated_on",
+      "sys_created_by",
+      "sys_updated_by",
+      "number",
+      "state",
+      "priority",
+      "urgency",
+      "impact",
+      "category",
+      "subcategory",
+      "account",
+      "contact",
+      "consumer",
+      "assignment_group",
+      "assigned_to",
+      "short_description",
+      "description",
+      "work_notes",
+      "close_notes"
+    ],
+    "operations": [
+      "create",
+      "read",
+      "update",
+      "list",
+      "search"
+    ],
+    "priority": 2,
+    "package": "service_desk",
+    "description": "ServiceNow Customer Service Case table (CSM)"
+  },
+  "customer_account": {
+    "label": "Account",
+    "table": "customer_account",
+    "key_field": "number",
+    "display_field": "name",
+    "required_fields": [
+      "name"
+    ],
+    "common_fields": [
+      "sys_created_on",
+      "sys_updated_on",
+      "sys_created_by",
+      "sys_updated_by",
+      "number",
+      "name",
+      "email",
+      "phone",
+      "website",
+      "industry",
+      "primary_contact",
+      "account_parent",
+      "partner"
+    ],
+    "operations": [
+      "create",
+      "read",
+      "update",
+      "list",
+      "search"
+    ],
+    "priority": 2,
+    "package": "service_desk",
+    "description": "ServiceNow Customer Account table (CSM)"
+  },
+  "customer_contact": {
+    "label": "Contact",
+    "table": "customer_contact",
+    "key_field": "user_name",
+    "display_field": "name",
+    "required_fields": [
+      "user_name",
+      "last_name",
+      "account"
+    ],
+    "common_fields": [
+      "sys_created_on",
+      "sys_updated_on",
+      "sys_created_by",
+      "sys_updated_by",
+      "user_name",
+      "name",
+      "first_name",
+      "last_name",
+      "email",
+      "phone",
+      "mobile_phone",
+      "account",
+      "active",
+      "vip"
+    ],
+    "operations": [
+      "create",
+      "read",
+      "update",
+      "list",
+      "search"
+    ],
+    "priority": 2,
+    "package": "service_desk",
+    "description": "ServiceNow Customer Contact table (CSM)"
+  },
+  "sc_request": {
+    "label": "Request",
+    "table": "sc_request",
+    "key_field": "number",
+    "display_field": "short_description",
+    "required_fields": [
+      "requested_for"
+    ],
+    "common_fields": [
+      "sys_created_on",
+      "sys_updated_on",
+      "sys_created_by",
+      "sys_updated_by",
+      "number",
+      "requested_for",
+      "opened_by",
+      "approval",
+      "request_state",
+      "stage",
+      "short_description",
+      "description",
+      "price",
+      "active"
+    ],
+    "operations": [
+      "create",
+      "read",
+      "update",
+      "list",
+      "search"
+    ],
+    "priority": 2,
+    "package": "service_desk",
+    "description": "ServiceNow Sc Request table"
+  },
+  "sc_req_item": {
+    "label": "Requested Item",
+    "table": "sc_req_item",
+    "key_field": "number",
+    "display_field": "short_description",
+    "required_fields": [
+      "request",
+      "cat_item"
+    ],
+    "common_fields": [
+      "sys_created_on",
+      "sys_updated_on",
+      "sys_created_by",
+      "sys_updated_by",
+      "number",
+      "request",
+      "cat_item",
+      "requested_for",
+      "state",
+      "stage",
+      "short_description",
+      "description",
+      "assigned_to",
+      "assignment_group",
+      "active"
+    ],
+    "operations": [
+      "create",
+      "read",
+      "update",
+      "list",
+      "search"
+    ],
+    "priority": 2,
+    "package": "service_desk",
+    "description": "ServiceNow Sc Req Item table"
+  },
+  "csm_consumer": {
+    "label": "Consumer",
+    "table": "csm_consumer",
+    "key_field": "number",
+    "display_field": "name",
+    "required_fields": [
+      "last_name"
+    ],
+    "common_fields": [
+      "sys_created_on",
+      "sys_updated_on",
+      "sys_created_by",
+      "sys_updated_by",
+      "number",
+      "name",
+      "first_name",
+      "last_name",
+      "email",
+      "mobile_phone",
+      "business_phone",
+      "user",
+      "active"
+    ],
+    "operations": [
+      "create",
+      "read",
+      "update",
+      "list",
+      "search"
+    ],
+    "priority": 2,
+    "package": "service_desk",
+    "description": "ServiceNow CSM Consumer table"
+  },
+  "sc_task": {
+    "label": "Catalog Task",
+    "table": "sc_task",
+    "key_field": "number",
+    "display_field": "short_description",
+    "required_fields": [
+      "request_item"
+    ],
+    "common_fields": [
+      "sys_created_on",
+      "sys_updated_on",
+      "sys_created_by",
+      "sys_updated_by",
+      "number",
+      "request_item",
+      "request",
+      "cat_item",
+      "state",
+      "short_description",
+      "description",
+      "assigned_to",
+      "assignment_group",
+      "active"
+    ],
+    "operations": [
+      "create",
+      "read",
+      "update",
+      "list",
+      "search"
+    ],
+    "priority": 2,
+    "package": "service_desk",
+    "description": "ServiceNow Sc Task table"
+  },
+  "wm_order": {
+    "label": "Work Order",
+    "table": "wm_order",
+    "key_field": "number",
+    "display_field": "short_description",
+    "required_fields": [],
+    "common_fields": [
+      "sys_created_on",
+      "sys_updated_on",
+      "sys_created_by",
+      "sys_updated_by",
+      "number",
+      "state",
+      "priority",
+      "account",
+      "contact",
+      "location",
+      "short_description",
+      "description",
+      "assigned_to",
+      "assignment_group",
+      "active"
+    ],
+    "operations": [
+      "create",
+      "read",
+      "update",
+      "list",
+      "search"
+    ],
+    "priority": 2,
+    "package": "field_service",
+    "description": "ServiceNow Work Order table (FSM)"
+  },
+  "wm_task": {
+    "label": "Work Order Task",
+    "table": "wm_task",
+    "key_field": "number",
+    "display_field": "short_description",
+    "required_fields": [
+      "work_order"
+    ],
+    "common_fields": [
+      "sys_created_on",
+      "sys_updated_on",
+      "sys_created_by",
+      "sys_updated_by",
+      "number",
+      "work_order",
+      "state",
+      "priority",
+      "location",
+      "short_description",
+      "assigned_to",
+      "assignment_group",
+      "active"
+    ],
+    "operations": [
+      "create",
+      "read",
+      "update",
+      "list",
+      "search"
+    ],
+    "priority": 2,
+    "package": "field_service",
+    "description": "ServiceNow Work Order Task table (FSM)"
   }
 }

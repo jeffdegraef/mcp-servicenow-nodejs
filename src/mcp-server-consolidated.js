@@ -13,6 +13,7 @@ import { fileURLToPath } from 'url';
 import { configManager } from './config-manager.js';
 import { syncScript, syncAllScripts, SCRIPT_TYPES } from './script-sync.js';
 import { parseNaturalLanguage, getSupportedPatterns } from './natural-language.js';
+import { searchKnowledge } from './tools/knowledge.js';
 
 export async function createMcpServer(serviceNowClient) {
   const server = new Server(
@@ -1335,6 +1336,18 @@ export async function createMcpServer(serviceNowClient) {
           },
           required: ['sys_id', 'data']
         }
+      },
+      {
+        name: 'SN-Search-Knowledge',
+        description: 'Search the local ServiceNow knowledge base (Zurich documentation) using vector search (RAG). Use this for technical questions about platform configuration, APIs, and business modules.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            query: { type: 'string', description: 'The technical question or search terms' },
+            limit: { type: 'number', description: 'Max results to return (default: 5)', default: 5 }
+          },
+          required: ['query']
+        }
       }
     ];
 
@@ -1880,6 +1893,34 @@ ${show_patterns ? `\n## Supported Patterns:\n${JSON.stringify(getSupportedPatter
           } else {
             responseText += `## No records found matching the query.\n\nTry adjusting your search criteria or use SN-Query-Table for more control.`;
           }
+
+          return {
+            content: [{
+              type: 'text',
+              text: responseText
+            }]
+          };
+        }
+
+        case 'SN-Search-Knowledge': {
+          const { query, limit = 5 } = args;
+          console.error(`📚 Searching knowledge base for: "${query}"`);
+
+          const results = await searchKnowledge(query, limit);
+
+          if (results.length === 0) {
+            return {
+              content: [{
+                type: 'text',
+                text: `No matching documentation found for: "${query}"`
+              }]
+            };
+          }
+
+          let responseText = `📚 **Knowledge Base Search Results**\n\n`;
+          results.forEach((res, idx) => {
+            responseText += `### Match ${idx + 1} (Source: ${res.source})\n${res.text}\n---\n\n`;
+          });
 
           return {
             content: [{
