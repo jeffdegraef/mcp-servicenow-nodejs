@@ -14,6 +14,7 @@ import { configManager } from './config-manager.js';
 import { syncScript, syncAllScripts, SCRIPT_TYPES } from './script-sync.js';
 import { parseNaturalLanguage, getSupportedPatterns } from './natural-language.js';
 import { searchKnowledge } from './tools/knowledge.js';
+import { getManualContent } from './tools/document-loader.js';
 
 export async function createMcpServer(serviceNowClient) {
   const server = new Server(
@@ -1348,6 +1349,20 @@ export async function createMcpServer(serviceNowClient) {
           },
           required: ['query']
         }
+      },
+      {
+        name: 'get_servicenow_manual',
+        description: 'Retrieves the full text of a ServiceNow manual. Use this for deep research, summarization, or finding relationships across chapters. Input must be an exact filename from the content map.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            filename: {
+              type: 'string',
+              description: 'The exact filename of the manual to read (e.g. "servicenow-zurich-it-service-management-enus.txt")'
+            }
+          },
+          required: ['filename']
+        }
       }
     ];
 
@@ -1928,6 +1943,30 @@ ${show_patterns ? `\n## Supported Patterns:\n${JSON.stringify(getSupportedPatter
               text: responseText
             }]
           };
+        }
+
+        case 'get_servicenow_manual': {
+          const { filename } = args;
+          console.error(`📄 Retrieving full manual: ${filename}`);
+
+          try {
+            const content = await getManualContent(filename);
+            return {
+              content: [{
+                type: 'text',
+                text: content
+              }]
+            };
+          } catch (error) {
+            console.error(`❌ Failed to retrieve manual ${filename}: ${error.message}`);
+            return {
+              content: [{
+                type: 'text',
+                text: `Error: ${error.message}`
+              }],
+              isError: true
+            };
+          }
         }
 
         case 'SN-Set-Update-Set': {
